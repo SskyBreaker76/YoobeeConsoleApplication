@@ -669,7 +669,7 @@ int main()
 							SetConsoleTitle(TEXT("Calculator"));
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | subtract | tri | crcl | exit\n";
+							cout << "add | subtract | tri | crcl | odd | prime | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -766,7 +766,63 @@ int main()
 								cin >> radius;
 
 								cout << "((pi*" << radius << unit << ")*" << radius << unit << "=" << ((mathPi * radius) * radius) << unit;
-								cout << "\n\nArea of Circle is " << ((mathPi * radius) * radius) << unit;
+								cout << "\n\nArea of Circle is " << ((mathPi * radius) * radius) << unit << "\n";
+
+								system("pause");
+								system("CLS");
+							}
+							else if (func == "odd") 
+							{
+								int num = 0;
+								cout << "Number: ";
+								cin >> num;
+
+								if (num % 2 == 0) 
+								{
+									cout << "\nNumber (" << num << ") is even.\n";
+								}
+								else 
+								{
+									cout << "\nNumber (" << num << ") is odd.\n";
+								}
+
+								system("pause");
+								system("CLS");
+							}
+							else if (func == "prime") 
+							{
+								int num = 0;
+								cout << "Number: ";
+								cin >> num;
+
+								bool isPrime = true;
+
+								if (num == 0 || num == 1) 
+								{
+									isPrime == false;
+								}
+								else 
+								{
+									for (int i = 2; i <= num / 2; i++) 
+									{
+										if (num % i == 0) 
+										{
+											isPrime = false;
+										}
+									}
+								}
+
+								if (isPrime) 
+								{
+									cout << "\nNumber (" << num << ") is prime.\n";
+								}
+								else 
+								{
+									cout << "\nNumber (" << num << ") is not prime.\n";
+								}
+
+								system("pause");
+								system("CLS");
 							}
 							else if (func == "exit")
 							{
@@ -829,22 +885,6 @@ int main()
 					cout << "echo[0] = ";
 					getline(cin >> ws, value);
 					cout << "\n\n" << value << "\n\n";
-				}
-				else if (command == "split") 
-				{
-					string value;
-					cout << "split[1] = ";
-					getline(cin >> ws, value);
-
-					cout << "Splitting Value...\n";
-
-					string* splitValue = SplitString(value);
-					string* sample = { };
-					sample->append("Hello");
-					sample->append("World");
-
-					cout << "Value:\n" << splitValue;
-					cout << "\nSample:\n" << sample;
 				}
 			}
 			else
