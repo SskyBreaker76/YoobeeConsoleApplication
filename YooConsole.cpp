@@ -1,6 +1,6 @@
-/*
+﻿/*
 +----------------+
-|   YooConsole   |
+|   SkyOS   |
 +----------------+
 
 Code written by Jackie Gamby-Haycock 2021
@@ -11,8 +11,12 @@ Code written by Jackie Gamby-Haycock 2021
 #include <locale>
 #include <iterator>
 #include <sstream>
-#include <Windows.h>
+#include <windows.h>
 #include <direct.h>
+#include <vector>
+
+#define _CRT_SECURE_NO_WARNINGS 1
+#define mathPi 3.141
 
 using namespace std;
 
@@ -247,7 +251,8 @@ int RunAdventure()
 	while (true)
 	{
 		cout << "What is your name? ";
-		cin >> player.characterName;
+		getline(cin >> ws, player.characterName);
+		// cin >> player.characterName;
 
 		string nameVerif = "";
 
@@ -261,11 +266,11 @@ int RunAdventure()
 		{
 			break;
 		}
-		else if (nameVerif == "n") 
+		else if (nameVerif == "n")
 		{
 
 		}
-		else 
+		else
 		{
 			goto nameVerifStart;
 		}
@@ -533,13 +538,27 @@ int StartAdventure()
 	return 0;
 }
 
+string* SplitString(string input) 
+{
+	istringstream iss(input);
+
+	vector<string> results((istream_iterator<string>(iss)), istream_iterator<string>());
+
+	return results.data();
+}
+
 /// <summary>
 /// Main function for running program. Executes automatically at startup
 /// </summary>
 /// <returns></returns>
 int main()
 {
-	SetConsoleTitle(TEXT("YooConsole - Startup"));
+
+	SetConsoleTitle(TEXT("SkyOS - Startup"));
+
+	system("mode con COLS=700");
+	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+	SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 
 	bool skipLogin = false; // Only enable when running on home computer please :)
 
@@ -557,7 +576,8 @@ int main()
 	if (passcode == pass || skipLogin)
 	{
 		cout << "What's your name? "; // Ask user for their name
-		cin >> name; // Store the users input into the variable "name"
+		getline(cin >> ws, name);
+		// cin >> name; // Store the users input into the variable "name"
 
 		system("CLS"); // Clear console window
 
@@ -585,17 +605,17 @@ int main()
 		cout << "\n\n";
 		*/
 
-		cout << "\t+----------------------------+\n";
-		cout << "\t|                            |\n";
-		cout << "\t|  YooConsole version 0.1.0  |\n";
-		cout << "\t|                            |\n";
-		cout << "\t+----------------------------+\n\n";
+		cout << "\t+-----------------------+\n";
+		cout << "\t|                       |\n";
+		cout << "\t|  SkyOS version 0.1.0  |\n";
+		cout << "\t|                       |\n";
+		cout << "\t+-----------------------+\n\n";
 
 		bool running = true;
 
 		while (running == true)
 		{
-			SetConsoleTitle(TEXT("YooConsole - Command Line"));
+			SetConsoleTitle(TEXT("SkyOS - Command Line"));
 
 			bool skipNewLine = false;
 
@@ -615,7 +635,7 @@ int main()
 			else if (command == "help")
 			{
 				system("CLS");
-				SetConsoleTitle(TEXT("YooConsole - Help"));
+				SetConsoleTitle(TEXT("SkyOS - Help"));
 				cout << "=====[ HELP ]=====\n\n";
 				cout << "====[ COMMANDS ]====\n> shutdown - closes the program\n> cls - clears the consolescreen\n> exec - execute a program\n\t> calc - simple calculator\n\t> adventure - a small text adventure\n\n";
 				system("pause");
@@ -628,7 +648,7 @@ int main()
 
 				while (true)
 				{
-					SetConsoleTitle(TEXT("YooConsole - Execute Program"));
+					SetConsoleTitle(TEXT("SkyOS - Execute Program"));
 
 					cout << "=====[ EXECUTE PROGRAM ]=====\n\n";
 
@@ -649,7 +669,7 @@ int main()
 							SetConsoleTitle(TEXT("Calculator"));
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | subtract | tri | exit\n";
+							cout << "add | subtract | tri | crcl | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -719,10 +739,10 @@ int main()
 								cout << "Target Units: ";
 								cin >> unit;
 
-								cout << "Base Length: ";
+								cout << "\nBase Length: ";
 								cin >> sideA;
 
-								cout << "Height Length: ";
+								cout << "\nHeight Length: ";
 								cin >> sideB;
 
 								float result = (sideA * sideB) / 2;
@@ -731,6 +751,22 @@ int main()
 
 								system("pause");
 								system("CLS");
+							}
+							else if (func == "crcl")
+							{
+								SetConsoleTitle(TEXT("Calculator - CALCULATE AREA OF CIRCLE"));
+
+								string unit = "";
+								float radius = 0;
+
+								cout << "Target Units: ";
+								cin >> unit;
+
+								cout << "\nCircle Radius: ";
+								cin >> radius;
+
+								cout << "((pi*" << radius << unit << ")*" << radius << unit << "=" << ((mathPi * radius) * radius) << unit;
+								cout << "\n\nArea of Circle is " << ((mathPi * radius) * radius) << unit;
 							}
 							else if (func == "exit")
 							{
@@ -742,14 +778,6 @@ int main()
 					{
 						SetConsoleTitle(TEXT("Text Adventure"));
 						StartAdventure();
-					}
-					else if (exec == "batman")
-					{
-						SetConsoleTitle(TEXT("Batch Manager"));
-
-						_mkdir("bat_files/");
-
-						
 					}
 					else
 					{
@@ -764,6 +792,61 @@ int main()
 				skipNewLine = true;
 				system("CLS");
 			}
+			else if (command == "retro")
+			{
+			colourScreen:
+				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer')\n> ";
+				string colour = "default";
+				cin >> colour;
+
+				if (colour == "default") 
+				{
+					system("Color 0F");
+				}
+				else if (colour == "amber") 
+				{
+					system("Color 06");
+				}
+				else if (colour == "sulfer") 
+				{
+					system("Color 02");
+				}
+				else 
+				{
+					system("CLS");
+					goto colourScreen;
+				}
+			}
+			else if (command == "func") 
+			{
+				cout << "Enter function:\n";
+				string command = "";
+				cin >> command;
+
+				if (command == "echo") 
+				{
+					string value;
+					cout << "echo[0] = ";
+					getline(cin >> ws, value);
+					cout << "\n\n" << value << "\n\n";
+				}
+				else if (command == "split") 
+				{
+					string value;
+					cout << "split[1] = ";
+					getline(cin >> ws, value);
+
+					cout << "Splitting Value...\n";
+
+					string* splitValue = SplitString(value);
+					string* sample = { };
+					sample->append("Hello");
+					sample->append("World");
+
+					cout << "Value:\n" << splitValue;
+					cout << "\nSample:\n" << sample;
+				}
+			}
 			else
 			{
 				cout << "Unknown command \"" << command << "\". Type \"help\" for a list of all available commands!";
@@ -773,11 +856,11 @@ int main()
 				cout << "\n";
 			else
 			{
-				cout << "\t+----------------------------+\n";
-				cout << "\t|                            |\n";
-				cout << "\t|  YooConsole version 0.1.0  |\n";
-				cout << "\t|                            |\n";
-				cout << "\t+----------------------------+\n\n";
+				cout << "\t+-----------------------+\n";
+				cout << "\t|                       |\n";
+				cout << "\t|  SkyOS version 0.1.0  |\n";
+				cout << "\t|                       |\n";
+				cout << "\t+-----------------------+\n\n";
 			}
 		}
 	}
