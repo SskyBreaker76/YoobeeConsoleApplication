@@ -560,7 +560,7 @@ int main()
 	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
 	SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 
-	bool skipLogin = false; // Only enable when running on home computer please :)
+	bool skipLogin = true; // Only enable when running on home computer please :)
 
 	string name = ""; // Initialize the variable "name"
 	string passcode = "";
