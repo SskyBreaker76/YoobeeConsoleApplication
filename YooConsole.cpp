@@ -765,8 +765,8 @@ int main()
 								cout << "\nCircle Radius: ";
 								cin >> radius;
 
-								cout << "((pi*" << radius << unit << ")*" << radius << unit << "=" << ((mathPi * radius) * radius) << unit;
-								cout << "\n\nArea of Circle is " << ((mathPi * radius) * radius) << unit << "\n";
+								cout << "(pi*(" << radius << unit << "*" << radius << unit << ")=" << ((mathPi * radius) * radius) << unit;
+								cout << "\n\nArea of Circle is " << ((mathPi) * (radius * radius)) << unit << "\n";
 
 								system("pause");
 								system("CLS");
