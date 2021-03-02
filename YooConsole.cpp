@@ -5,6 +5,8 @@
 
 Code written by Jackie Gamby-Haycock 2021
 */
+
+// =====[ INCLUDES ]=====
 #include <iostream>
 #include <string>
 #include <stdlib.h>
@@ -15,13 +17,15 @@ Code written by Jackie Gamby-Haycock 2021
 #include <direct.h>
 #include <vector>
 
-#define _CRT_SECURE_NO_WARNINGS 1
+// =====[ DEFINES ]=====
 #define mathPi 3.141
 
+// =====[ NAMESPACES ]=====
 using namespace std;
 
 string pass = "Bung";
 
+// =====[ CLASSES ]=====
 class Character
 {
 public:
@@ -46,11 +50,11 @@ Character player = Character("Player", 10, 1);
 string GetCurrentPath();
 
 /// <summary>
-/// 
+/// Runs a combat encounter with 
 /// </summary>
-/// <param name="combatants">List of all ENEMY characters in combat encounter</param>
-/// <returns></returns>
-int CombatEncounter(Character combatants, int enemyCount = 0)
+/// <param name="combatants">ENEMY character to use in combat encounter</param>
+/// <returns>Outcome of the combat encounter. 0 > Player died, 1 > Player killed the enemies, 2 > Player fled combat</returns>
+int CombatEncounter(Character combatants)
 {
 	system("CLS");
 
@@ -59,6 +63,7 @@ int CombatEncounter(Character combatants, int enemyCount = 0)
 
 	cout << combatants.characterName << " confronts you!\n\n";
 
+	// Keeps combat running while the enemy's still alive
 	while (allEnemiesDead == false)
 	{
 		// Player Turn
@@ -68,7 +73,7 @@ int CombatEncounter(Character combatants, int enemyCount = 0)
 		cout << "attack (" << (player.attack + player.weaponBonus) << " damage) | potion (" << player.potions << " left) | flee\n> ";
 		cin >> plrAction;
 
-		if (plrAction == "flee")
+		if (plrAction == "flee") // When the player chooses to flee, the game generates a random number between 0 and 4 for both the target chance, and the players roll. If they're equal, combat ends with result of player fleed.
 		{
 			int targetChance = rand() % 5;
 			int playerValue = rand() % 5;
@@ -83,7 +88,7 @@ int CombatEncounter(Character combatants, int enemyCount = 0)
 				cout << "You weren't quick enough!\n";
 			}
 		}
-		else if (plrAction == "potion")
+		else if (plrAction == "potion") // When the player chooses to drink a potion, the code takes one potion away, adds 5 to their health and ensures that their health isn't above 10
 		{
 			if (player.potions > 0)
 			{
@@ -102,7 +107,7 @@ int CombatEncounter(Character combatants, int enemyCount = 0)
 				cout << "You've run out of potions!\n";
 			}
 		}
-		else if (plrAction == "attack")
+		else if (plrAction == "attack") // When the player attacks, they deal damage based off of their base attack and their weapons bonus.
 		{
 			combatants.health -= player.attack;
 			cout << "You swing your weapon at the " << combatants.characterName << ", dealing " << (player.attack + player.weaponBonus) << " damage!\n";
@@ -111,69 +116,85 @@ int CombatEncounter(Character combatants, int enemyCount = 0)
 
 		if (combatants.health > 0)
 		{
+			// AI always attacks
 			cout << combatants.characterName << " attacks (" << combatants.attack << " DP)!\n";
 
 			if (combatants.attack >= player.armourBonus)
 			{
-				int attackRand = rand() % 3 - 1;
+				int attackRand = rand() % 3 - 1; // Random amount to add to enemy's damage.
 				int finalAttack = combatants.attack + attackRand;
 
-				if (finalAttack < 0)
+				if (finalAttack <= 0) // If attackRand is less than or equal to 0, the AI's attack is counted as a miss.
 				{
 					cout << "But they miss!\n";
 				}
 				else
-				{
+				{ // Otherise, they deal attackRand of damage to the player.
 					player.health -= finalAttack;
 					cout << combatants.characterName << " deals " << finalAttack << " damage!\n";
 				}
 			}
 			else
-			{
+			{ // If the players armour bonus is more than the enemy's attack, enemy will automatically miss.
 				cout << "But they miss!\n";
 			}
 		}
 		else
 		{
-			combatResult = 1;
+			combatResult = 1; // When the player kills all enemy's return combatResult of 1.
 			break;
 		}
 
 		if (player.health <= 0)
 		{
-			combatResult = 0;
+			combatResult = 0; // When the player dies, return combatResult of 0
 			break;
 		}
 
-		system("pause");
-		system("CLS");
+		system("pause"); // Wait for any key to be pressed before continuing combat.
+		system("CLS"); // Clear screen to make the view remain nice and clean
 	}
 
+	// Below are just the different messages for the various combat results. This is done inside the combat function
+	// so that it's easier to update them if I think they need changing.
 	if (combatResult == 0)
 	{
+		// Player dies
 		cout << player.characterName << " was defeated!\n\n";
 	}
 	else if (combatResult == 1)
 	{
-		cout << player.characterName << " has defeated all enemies!\n\n";
+		// Player kills the enemy
+		cout << player.characterName << " has defeated the" << combatants.characterName << "!\n\n";
 	}
 	else if (combatResult == 2)
 	{
+		// Player flees combat
 		cout << player.characterName << " successfully fled combat!\n\n";
 	}
 
+	// Return combatResult for use outside of combat.
 	return combatResult;
 }
 
-int DoChoice(string branches[], int choiceCount, bool clear = false)
+/// <summary>
+/// Used for players choice input. Returns a number based off the users choice.
+/// </summary>
+/// <param name="branches"></param>
+/// <param name="choiceCount"></param>
+/// <param name="clear"></param>
+/// <returns></returns>
+int DoChoice(string* branches, bool clear = false)
 {
 	int choice = 0;
 
 	cout << "\n\n===[ USE NUMBERS TO CHOOSE ]===\n\nCurrent HP: " << player.health << "/10\nCurrent Potions: " << player.potions << "\n\n";
 
+	// Create a loop that won't end unless the 'break' keyword is used
 	while (true)
 	{
-		for (int i = 0; i < choiceCount; i++)
+		// This for loop goes through the branches list and displays their text and index.
+		for (int i = 0; i < sizeof(branches); i++)
 		{
 			if (i > 0)
 			{
@@ -182,15 +203,15 @@ int DoChoice(string branches[], int choiceCount, bool clear = false)
 
 			cout << " [" << i << "] " << branches[i];
 		}
-		cout << "\n [" << choiceCount << "] Consume Potion (" << player.potions << ")";
+		cout << "\n [" << sizeof(branches) << "] Consume Potion (" << player.potions << ")"; // Add this option so the player can drink potions outside of combat
 		cout << "\n\n> ";
 		cin >> choice;
 
-		if (choice == choiceCount)
+		if (choice == sizeof(branches)) // The player has chosen to drink a potion, execute the code below
 		{
 			system("CLS");
 
-			if (player.potions > 0)
+			if (player.potions > 0) // If the player has potions in their inventory, remove one from inventory, add 5 to the HP and make sure their HP is capped at 10
 			{
 				cout << "You drink one of your potions, gaining 5 HP!\n";
 				player.potions--;
@@ -201,28 +222,31 @@ int DoChoice(string branches[], int choiceCount, bool clear = false)
 			}
 			else
 			{
+				// Display a special message for when the player has no potions
 				cout << "You rummage for a potion, but there don't appear to be any left!";
 			}
 
+			// Wait for user input.
 			system("pause");
 			break;
 		}
-		else if (choice < choiceCount)
+		else if (choice < sizeof(branches)) // This makes sure the player's choice is valid.
 		{
 			break;
 		}
 		else
 		{
-			cout << "Choice number [" << choice << "] doesn't exist! Please input a number between 0 and " << (choiceCount - 1) << "!";
+			// When the players choice is outside of the range, show this error message
+			cout << "Choice number [" << choice << "] doesn't exist! Please input a number between 0 and " << (sizeof(branches) - 1) << "!";
 		}
 	}
 
 	if (clear)
 	{
-		system("CLS");
+		system("CLS"); // If the clear flag is checked, clear the screen before continuing.
 	}
 
-	return choice;
+	return choice; // Return the player's choice for use outside the function
 }
 
 void GameOver()
@@ -230,6 +254,10 @@ void GameOver()
 	cout << "\nAs your vision fades to black, you drop your weapon and fall to the ground...\nLooks like this is the end of your adventure!";
 }
 
+/// <summary>
+/// Base command for the adventure, I am NOT going to comment all of this.
+/// </summary>
+/// <returns></returns>
 int RunAdventure()
 {
 	Character enemies[] =
@@ -289,14 +317,14 @@ int RunAdventure()
 			cout << "EXTINGUISHED FIRE, and a SMALL AXE. What do you do?";
 
 			string choices[] = { "Examine EXTINGUISHED FIRE", "Take SMALL AXE", "Look for an EXIT" };
-			choice = DoChoice(choices, 3);
+			choice = DoChoice(choices);
 		}
 		else
 		{
 			cout << "EXTINGUISHED FIRE. What do you do?";
 
 			string choices[] = { "Examine EXTINGUISHED FIRE", "Look for an EXIT" };
-			choice = DoChoice(choices, 2);
+			choice = DoChoice(choices);
 		}
 
 		system("CLS");
@@ -357,7 +385,7 @@ int RunAdventure()
 
 	cout << "How do you approach the light?";
 	string options[] = { "Boldly", "Normally", "Cautiously" };
-	choice = DoChoice(options, 3);
+	choice = DoChoice(options);
 
 	int combatStatus = 0;
 
@@ -365,7 +393,7 @@ int RunAdventure()
 	{
 		cout << "As you thunder down the cave passage, you hear the sounds of a small group of goblins being alerted of your presence...\n";
 		system("pause");
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -373,7 +401,7 @@ int RunAdventure()
 			goto endAdventure;
 		}
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -381,7 +409,7 @@ int RunAdventure()
 			goto endAdventure;
 		}
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -389,7 +417,7 @@ int RunAdventure()
 			goto endAdventure;
 		}
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -397,7 +425,7 @@ int RunAdventure()
 			goto endAdventure;
 		}
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -411,7 +439,7 @@ int RunAdventure()
 		cout << "You walk down the passage as you would the town streets. A tiny group of goblins stumble upon you...\n";
 		system("pause");
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -419,7 +447,7 @@ int RunAdventure()
 			goto endAdventure;
 		}
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -427,7 +455,7 @@ int RunAdventure()
 			goto endAdventure;
 		}
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -441,7 +469,7 @@ int RunAdventure()
 		cout << "You creep down the cave passage as quietly as you can... A single goblin bumps into you...\n";
 		system("pause");
 
-		combatStatus = CombatEncounter(enemies[1], 1);
+		combatStatus = CombatEncounter(enemies[1]);
 
 		if (combatStatus == 0)
 		{
@@ -475,7 +503,7 @@ int RunAdventure()
 			{
 				cout << "You accidentally step on the tail of a goblin, causing him to yelp and wake his partner...\n";
 				system("pause");
-				combatStatus = CombatEncounter(enemies[1], 1);
+				combatStatus = CombatEncounter(enemies[1]);
 
 				if (combatStatus == 0)
 				{
@@ -483,7 +511,7 @@ int RunAdventure()
 					goto endAdventure;
 				}
 
-				combatStatus = CombatEncounter(enemies[1], 1);
+				combatStatus = CombatEncounter(enemies[1]);
 
 				if (combatStatus == 0)
 				{
@@ -505,6 +533,10 @@ playerNeverDied:
 	return 0;
 }
 
+/// <summary>
+/// Starts the text adventure. Everything in here should be pretty self explanatory
+/// </summary>
+/// <returns></returns>
 int StartAdventure()
 {
 	while (true)
@@ -538,6 +570,11 @@ int StartAdventure()
 	return 0;
 }
 
+/// <summary>
+/// This function doesn't work yet. Still trying to figure it out :l
+/// </summary>
+/// <param name="input"></param>
+/// <returns></returns>
 string* SplitString(string input) 
 {
 	istringstream iss(input);
@@ -552,19 +589,26 @@ string* SplitString(string input)
 /// </summary>
 /// <returns></returns>
 int main()
-{
-
+{	
 	SetConsoleTitle(TEXT("SkyOS - Startup"));
 
-	system("mode con COLS=700");
-	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
-	SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
+	bool fullscreenMode = true;
 
-	bool skipLogin = true; // Only enable when running on home computer please :)
+	// The three lines below make sure the window starts in fullscreen. Can be disabled, but really gives the old DOS feeling
+
+	if (fullscreenMode) 
+	{
+		system("mode con COLS=700");
+		ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+		SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
+	}
+
+	bool skipLogin = true; // Skips the password field. Just leaving set to "true" for convenience sake
 
 	string name = ""; // Initialize the variable "name"
 	string passcode = "";
 
+	// If skipLogin is false, fetch user password and store it as passcode
 	if (skipLogin == false)
 	{
 		cout << "Enter Password: ";
@@ -573,7 +617,7 @@ int main()
 
 	system("CLS");
 
-	if (passcode == pass || skipLogin)
+	if (passcode == pass || skipLogin) // If the password's correct or skipLogin is true, start the shell
 	{
 		cout << "What's your name? "; // Ask user for their name
 		getline(cin >> ws, name);
@@ -584,6 +628,8 @@ int main()
 		int nameLen = name.length(); // Get the length of the users name so that the asterisk box can be scaled appropriately
 
 		// cout << "Your name is " << nameLen << " characters long";
+
+		// Old code used to display a properly sized box around the users name
 /*
 		cout << "\n";
 		cout << "\t******";
@@ -605,34 +651,39 @@ int main()
 		cout << "\n\n";
 		*/
 
+		// Displays a neat banner when the program is started
 		cout << "\t+-----------------------+\n";
 		cout << "\t|                       |\n";
 		cout << "\t|  SkyOS version 0.1.0  |\n";
 		cout << "\t|                       |\n";
 		cout << "\t+-----------------------+\n\n";
 
+		// This boolean keeps track of whether the program's running. If it's set to false the program will terminate
 		bool running = true;
 
+		// Main program loop
 		while (running == true)
 		{
 			SetConsoleTitle(TEXT("SkyOS - Command Line"));
 
+			// This boolean is used mostly as a method of checking when the screen is refreshed. When it's true, the program will reload the banner shown on lines 655 > 659
 			bool skipNewLine = false;
 
+			// The three lines below get the users desired command and store it to the local variable "command"
 			string command = "";
 			cout << "> ";
 			cin >> command;
 
-			if (command == "shutdown")
+			if (command == "shutdown") // When the user types "shutdown", set running to false. Setting running to false of course causes the program to terminate
 			{
 				running = false;
 			}
-			else if (command == "cls")
+			else if (command == "cls") // When the user types "cls", clear the console screen and ensure the banner is re-drawn
 			{
 				skipNewLine = true;
 				system("CLS");
 			}
-			else if (command == "help")
+			else if (command == "help") // Help command. Displays all functions I've finished.
 			{
 				system("CLS");
 				SetConsoleTitle(TEXT("SkyOS - Help"));
@@ -642,93 +693,84 @@ int main()
 				skipNewLine = true;
 				system("CLS");
 			}
-			else if (command == "exec")
+			else if (command == "exec") // Exec command. Allows users to access the main calculator program as well as the text adventure.
 			{
 				system("CLS");
 
+				// Exec is effectively its own shell, start a loop to stop user from being booted back into the main shell.
 				while (true)
 				{
 					SetConsoleTitle(TEXT("SkyOS - Execute Program"));
 
-					cout << "=====[ EXECUTE PROGRAM ]=====\n\n";
+					cout << "=====[ EXECUTE PROGRAM ]=====\n\n"; // Sub-banner to show the programs title.
 
+					// The variable "exec" is used to determine which program the user wants to run.
 					string exec = "";
 					cout << "Programs:\n\n> calc\n> adventure\n\nProgram Name (type cancel to return to main command line): ";
 					cin >> exec;
 
 					system("CLS");
 
-					if (exec == "cancel")
+					if (exec == "cancel") // If the user types "cancel", break out of the exec function and return to main shell
 					{
 						break;
 					}
-					else if (exec == "calc")
+					else if (exec == "calc") // Startup the calculator function when the user types "calc"
 					{
+						// Give calculator its own shell so it doesn't boot them after every function
 						while (true)
 						{
 							SetConsoleTitle(TEXT("Calculator"));
+
+							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | subtract | tri | crcl | odd | prime | exit\n";
+							cout << "add | subtract | tri | crcl | evenodd | prime | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
 
-							if (func == "add")
+							if (func == "add") // Basic add function. Gets the users first and second number and adds them together
 							{
 								SetConsoleTitle(TEXT("Calculator - ADD"));
 
 								float numberA = 0;
 								float numberB = 0;
 
-								try
-								{
-									cout << "First Number: ";
-									cin >> numberA;
+								cout << "First Number: ";
+								cin >> numberA;
 
-									cout << "Second Number: ";
-									cin >> numberB;
+								cout << "Second Number: ";
+								cin >> numberB;
 
-									float finalNum = numberA + numberB;
+								float finalNum = numberA + numberB; // The actual math part of the function. I could do this in the cout statement but that looks messy
 
-									cout << numberA << "+" << numberB << "=" << finalNum << "\n";
+								cout << numberA << "+" << numberB << "=" << finalNum << "\n";
 
-									system("pause");
-									system("CLS");
-								}
-								catch (exception)
-								{
-									cout << "Error has occurred! Booting back to main program";
-								}
-							}
-							else if (func == "subtract")
+								system("pause");
+								system("CLS");
+						}
+							else if (func == "subtract") // Basic subtraction function. Gets the users first and second number and subtracts number 2 from number 1
 							{
 								SetConsoleTitle(TEXT("Calculator - SUBTRACT"));
 
 								float numberA = 0;
 								float numberB = 0;
 
-								try
-								{
-									cout << "First Number: ";
-									cin >> numberA;
+								cout << "First Number: ";
+								cin >> numberA;
 
-									cout << "Second Number: ";
-									cin >> numberB;
+								cout << "Second Number: ";
+								cin >> numberB;
 
-									float finalNum = numberA - numberB;
+								float finalNum = numberA - numberB; // The actual math part of the function. I could do this in the cout statement but that looks messy
 
-									cout << numberA << "-" << numberB << "=" << finalNum << "\n";
+								cout << numberA << "-" << numberB << "=" << finalNum << "\n";
 
-									system("pause");
-									system("CLS");
-								}
-								catch (exception)
-								{
-									cout << "Error has occurred! Booting back to main program";
-								}
+								system("pause");
+								system("CLS");
 							}
-							else if (func == "tri")
+							else if (func == "tri") // Function that gets the area of a triangle. Two inputs for side one and two (starts with a square so only works with right angle triangles)
 							{
 								SetConsoleTitle(TEXT("Calculator - CALCULATE AREA OF TRIANGLE"));
 
@@ -745,14 +787,14 @@ int main()
 								cout << "\nHeight Length: ";
 								cin >> sideB;
 
-								float result = (sideA * sideB) / 2;
+								float result = (sideA * sideB) / 2; // The actual math part of the function. I could do this in the cout statement but that looks messy
 								cout << "(" << sideA << unit << "*" << sideB << unit << ")/2=" << result << unit;
 								cout << "\n\nArea of Triangle is " << result << unit << "^2\n";
 
 								system("pause");
 								system("CLS");
 							}
-							else if (func == "crcl")
+							else if (func == "crcl") // Basic function gets area of circle using pi*r^2 (written out in this program as pi*(r*r)
 							{
 								SetConsoleTitle(TEXT("Calculator - CALCULATE AREA OF CIRCLE"));
 
@@ -765,19 +807,19 @@ int main()
 								cout << "\nCircle Radius: ";
 								cin >> radius;
 
-								cout << "(pi*(" << radius << unit << "*" << radius << unit << ")=" << ((mathPi * radius) * radius) << unit;
-								cout << "\n\nArea of Circle is " << ((mathPi) * (radius * radius)) << unit << "\n";
+								cout << "(pi*(" << radius << unit << "*" << radius << unit << ")=" << ((mathPi * radius) * radius) << unit; // Did the calculations in the cout statement to save time.
+								cout << "\n\nArea of Circle is " << ((mathPi) * (radius * radius)) << unit << "\n";							// And again. VERY inefficient function >:L
 
 								system("pause");
 								system("CLS");
 							}
-							else if (func == "odd") 
+							else if (func == "evenodd") // Simple function to get whether a number is odd or even
 							{
 								int num = 0;
 								cout << "Number: ";
 								cin >> num;
 
-								if (num % 2 == 0) 
+								if (num % 2 == 0)
 								{
 									cout << "\nNumber (" << num << ") is even.\n";
 								}
@@ -789,7 +831,7 @@ int main()
 								system("pause");
 								system("CLS");
 							}
-							else if (func == "prime") 
+							else if (func == "prime") // Basic function to get whether a number is prime or not.
 							{
 								int num = 0;
 								cout << "Number: ";
@@ -830,25 +872,28 @@ int main()
 							}
 						}
 					}
-					else if (exec == "adventure")
+					else if (exec == "adventure") // User clearly wants to play my AMAZING text adventure
 					{
 						SetConsoleTitle(TEXT("Text Adventure"));
+
+						// *Note: Text adventure isn't amazing yet :l
 						StartAdventure();
 					}
 					else
 					{
-						cout << "Unknown Program \"" << exec << "\"\n";
+						cout << "Unknown Program \"" << exec << "\"\n"; // When the user types an unknown program, tell them they messed up and try again.
 						system("pause");
 						system("CLS");
 					}
 				}
 
+				// These lines are only called after the exec while(true) loop is done
 				cout << "Returning to command line...\n\n";
 				system("pause");
-				skipNewLine = true;
+				skipNewLine = true; // Re-draws the banner.
 				system("CLS");
 			}
-			else if (command == "retro")
+			else if (command == "crt") // Hidden function designed to allow users to replicate the feeling of using a monochrome CRT monitor
 			{
 			colourScreen:
 				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer')\n> ";
@@ -857,29 +902,29 @@ int main()
 
 				if (colour == "default") 
 				{
-					system("Color 0F");
+					system("Color 0F"); // Default is a black background with white text
 				}
 				else if (colour == "amber") 
 				{
-					system("Color 06");
+					system("Color 06"); // Amber is a black background with yellow text
 				}
 				else if (colour == "sulfer") 
 				{
-					system("Color 02");
+					system("Color 02"); // Sulfer is a black background with green text
 				}
 				else 
 				{
 					system("CLS");
-					goto colourScreen;
+					goto colourScreen; // When the user puts in an invalid colour pallette, clear screen and head back up to the label colourScreen
 				}
 			}
-			else if (command == "func") 
+			else if (command == "func") // This is my experimentation area. Just like crt, this is hidden from the help text
 			{
 				cout << "Enter function:\n";
 				string command = "";
 				cin >> command;
 
-				if (command == "echo") 
+				if (command == "echo") // Echo (as the name suggests), reads the whole line of text a user inputs, and repeats it.
 				{
 					string value;
 					cout << "echo[0] = ";
@@ -889,13 +934,14 @@ int main()
 			}
 			else
 			{
+				// When a user puts in an unknown command, tell them off and tell them to use the help command for a list of commands
 				cout << "Unknown command \"" << command << "\". Type \"help\" for a list of all available commands!";
 			}
 
-			if (!skipNewLine)
+			if (!skipNewLine) // When skipNewLine is false, add a new line and ask for another command
 				cout << "\n";
-			else
-			{
+			else 
+			{	// When skipNewLine is true, draw the banner and ask for another command
 				cout << "\t+-----------------------+\n";
 				cout << "\t|                       |\n";
 				cout << "\t|  SkyOS version 0.1.0  |\n";
@@ -908,11 +954,4 @@ int main()
 	{
 		cout << "Invalid Password! Terminating Program...";
 	}
-}
-
-string GetCurrentPath()
-{
-	size_t size;
-	char* path = NULL;
-	return path;
 }
