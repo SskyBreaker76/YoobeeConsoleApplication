@@ -725,7 +725,7 @@ int main()
 							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | subtract | tri | crcl | evenodd | prime | exit\n";
+							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -749,8 +749,8 @@ int main()
 
 								system("pause");
 								system("CLS");
-						}
-							else if (func == "subtract") // Basic subtraction function. Gets the users first and second number and subtracts number 2 from number 1
+							}
+							else if (func == "sub") // Basic subtraction function. Gets the users first and second number and subtracts number 2 from number 1
 							{
 								SetConsoleTitle(TEXT("Calculator - SUBTRACT"));
 
@@ -766,6 +766,46 @@ int main()
 								float finalNum = numberA - numberB; // The actual math part of the function. I could do this in the cout statement but that looks messy
 
 								cout << numberA << "-" << numberB << "=" << finalNum << "\n";
+
+								system("pause");
+								system("CLS");
+							}
+							else if (func == "div") 
+							{
+								SetConsoleTitle(TEXT("Calculator - DIVIDE"));
+
+								float numberA = 0;
+								float numberB = 0;
+
+								cout << "First Number: ";
+								cin >> numberA;
+
+								cout << "Second Number: ";
+								cin >> numberB;
+
+								float finalNum = numberA / numberB;
+
+								cout << numberA << "/" << numberB << "=" << finalNum << "\n";
+								
+								system("pause");
+								system("CLS");
+							}
+							else if (func == "mult") 
+							{
+								SetConsoleTitle(TEXT("Calculator - MULTIPLY"));
+
+								float numberA = 0;
+								float numberB = 0;
+
+								cout << "First Number: ";
+								cin >> numberA;
+
+								cout << "Second Number: ";
+								cin >> numberB;
+
+								float finalNum = numberA * numberB;
+
+								cout << numberA << "*" << numberB << "=" << finalNum << "\n";
 
 								system("pause");
 								system("CLS");
