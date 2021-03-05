@@ -726,7 +726,7 @@ int main()
 							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | exit | pow | sqrt\n";
+							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | biggest | pow | sqrt (not implemented) | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -748,6 +748,40 @@ int main()
 
 								cout << numberA << "+" << numberB << "=" << finalNum << "\n";
 
+								system("pause");
+								system("CLS");
+							}
+							else if (func == "biggest") 
+							{
+								vector<float> numbers = {};
+
+								int numCount = 1;
+
+								cout << "How many numbers do you want to compare? ";
+								cin >> numCount;
+
+								for (int i = 0; i < numCount; i++) 
+								{
+									cout << "Number [" << i << "]: ";
+									float number = 0;
+									cin >> number;
+
+									numbers.push_back(number);
+								}
+
+								float largestNumber = -9999;
+								int largestNumberIndex = 0;
+
+								for (int i = 0; i < numbers.size(); i++) 
+								{
+									if (numbers[i] > largestNumber) 
+									{
+										largestNumberIndex = i;
+										largestNumber = numbers[i];
+									}
+								}
+
+								cout << "The largest number in your list is " << largestNumber << "! (numbers[" << largestNumberIndex << "])\n";
 								system("pause");
 								system("CLS");
 							}
@@ -916,7 +950,10 @@ int main()
 								cout << "Value B: ";
 								cin >> b;
 
-								cout << a << "^" << b << "=" << pow(a, b);
+								cout << a << "^" << b << "=" << pow(a, b) << "\n";
+
+								system("pause");
+								system("CLS");
 							}
 							else if (func == "exit")
 							{
@@ -959,7 +996,7 @@ int main()
 			else if (command == "crt") // Hidden function designed to allow users to replicate the feeling of using a monochrome CRT monitor
 			{
 			colourScreen:
-				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer')\n> ";
+				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer' or 'c64')\n> ";
 				string colour = "default";
 				cin >> colour;
 
@@ -974,6 +1011,10 @@ int main()
 				else if (colour == "sulfer") 
 				{
 					system("Color 02"); // Sulfer is a black background with green text
+				}
+				else if (colour == "c64") 
+				{
+					system("Color 59");
 				}
 				else 
 				{
