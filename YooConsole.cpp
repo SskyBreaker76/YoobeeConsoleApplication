@@ -16,6 +16,7 @@ Code written by Jackie Gamby-Haycock 2021
 #include <windows.h>
 #include <direct.h>
 #include <vector>
+#include <cmath>
 
 // =====[ DEFINES ]=====
 #define mathPi 3.141
@@ -706,7 +707,7 @@ int main()
 
 					// The variable "exec" is used to determine which program the user wants to run.
 					string exec = "";
-					cout << "Programs:\n\n> calc\n> adventure\n\nProgram Name (type cancel to return to main command line): ";
+					cout << "Programs:\n\n> calc\n> adventure\n> optest\n\nProgram Name (type cancel to return to main command line): ";
 					cin >> exec;
 
 					system("CLS");
@@ -725,7 +726,7 @@ int main()
 							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | exit\n";
+							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | exit | pow | sqrt\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -906,6 +907,17 @@ int main()
 								system("pause");
 								system("CLS");
 							}
+							else if (func == "pow") 
+							{
+								float a, b;
+								cout << "Value A: ";
+								cin >> a;
+
+								cout << "Value B: ";
+								cin >> b;
+
+								cout << a << "^" << b << "=" << pow(a, b);
+							}
 							else if (func == "exit")
 							{
 								break;
@@ -918,6 +930,17 @@ int main()
 
 						// *Note: Text adventure isn't amazing yet :l
 						StartAdventure();
+					}
+					else if (exec == "interest") 
+					{
+						float p = 500, r = 2, n = 6, t = 2, a;
+
+						cout << "How much money have you borrowed? ";
+						cin >> p;
+
+						a = p * pow((1 + r), n);
+
+						cout << "Interest is " << a << " a month";
 					}
 					else
 					{
