@@ -955,30 +955,46 @@ int main()
 								cout << "Start Number: ";
 								cin >> startnum;
 
-								bool isPrime = true;
-								for (int num = startnum; num < endnum; num++) {}
-								if (num == 0 || num == 1)
+								getend:
+
+								int endnum = 0;
+								cout << "End Number: ";
+								cin >> endnum;
+
+								if (endnum <= startnum) 
 								{
-									isPrime == false;
-								}
-								else
-								{
-									for (int i = 2; i <= num / 2; i++)
-									{
-										if (num % i == 0)
-										{
-											isPrime = false;
-										}
-									}
+									cout << "You can't have an end number that is less or equal to the start number!";
+									system("pause");
+									system("CLS");
 								}
 
-								if (isPrime)
+								bool isPrime = true;
+
+								for (int num = startnum; num < endnum; num++) 
 								{
-									cout << "\nNumber (" << num << ") is prime.\n";
-								}
-								else
-								{
-									cout << "\nNumber (" << num << ") is not prime.\n";
+									if (num == 0 || num == 1)
+									{
+										isPrime == false;
+									}
+									else
+									{
+										for (int i = 2; i <= num / 2; i++)
+										{
+											if (num % i == 0)
+											{
+												isPrime = false;
+											}
+										}
+									}
+
+									if (isPrime)
+									{
+										cout << "\nNumber (" << num << ") is prime.\n";
+									}
+									else
+									{
+										cout << "\nNumber (" << num << ") is not prime.\n";
+									}
 								}
 
 								system("pause");
