@@ -670,6 +670,13 @@ int main()
 		// This boolean keeps track of whether the program's running. If it's set to false the program will terminate
 		bool running = true;
 
+		ifstream colourSav("colour.pref");
+
+		if (colourSav.is_open())
+		{
+
+		}
+
 		// Main program loop
 		while (running == true)
 		{
@@ -734,7 +741,7 @@ int main()
 							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | getprimes | biggest | count | pow | sqrt (not implemented) | exit\n";
+							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | getprimes | biggest | count | pow | sqrt | quadrat | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -961,6 +968,21 @@ int main()
 								cout << "End Number: ";
 								cin >> endnum;
 
+								string filterPrimes;
+								bool filter;
+
+								cout << "Do you want to only see the prime numbers? Y/N: ";
+								cin >> filterPrimes;
+
+								if (filterPrimes == "y" || filterPrimes == "Y")
+								{
+									filter = true;
+								}					
+								else 
+								{
+									filter = false;
+								}
+
 								if (endnum <= startnum) 
 								{
 									cout << "You can't have an end number that is less or equal to the start number!";
@@ -993,7 +1015,8 @@ int main()
 									}
 									else
 									{
-										cout << "Number (" << num << ") is not prime.\n";
+										if (filter == false)
+											cout << "Number (" << num << ") is not prime.\n";
 									}
 								}
 
@@ -1011,6 +1034,49 @@ int main()
 
 								cout << a << "^" << b << "=" << pow(a, b) << "\n";
 
+								system("pause");
+								system("CLS");
+							}
+							else if (func == "sqrt") 
+							{
+								float input = 0;
+								cout << "Input Number: ";
+								cin >> input;
+
+								float result = sqrt(input);
+
+								cout << "\nThe square root of " << input << " is " << result << endl;
+								system("pause");
+								system("CLS");
+							}	
+							else if (func == "quadrat") 
+							{
+								float a, b, c, x1, x2, discriminant, realPart, falsePart;
+								cout << "Enter a, b, c\t";
+								cin >> a >> b >> c;
+								discriminant = b * b - 4 * a * c;
+
+								if (discriminant > 0) // If the discriminant is more than zero, roots are real and different!
+								{
+									x1 = (-b + sqrt(discriminant)) / (2 * a); // Take negative value of b and add the square root of discriminant. Divide the result by 2*a
+									x2 = (-b - sqrt(discriminant)) / (2 * a); // Take negative value of b and subtract the square root of discriminant. Divide the result by 2*a
+									cout << "Roots are real and unequal.\n";
+									cout << "x1 = " << x1 << ";\tx2 = " << x2 << endl; // Report the result of our calculations
+								}
+								else if (discriminant == 0) // If the discriminant is equal to zero, roots are real and same!
+								{
+									cout << "Roots are real and equal.\n";
+									x1 = -b / (2 * a); // Take the negative value of be and divide it by the result of 2*a. I only need to do this for one because they're both the same!
+									cout << "x1 = " << x1 << ";\tx2 =" << x1 << endl; // Report the answer to the user
+								}
+								else // If the discriminant is anything less than zero, roots are complex and different
+								{
+									realPart = -b/(2 * a); // Set the real part of the equasion to -b divided by the result of 2*a
+									falsePart = sqrt(-discriminant) / (2 * a); // Set the "imaginary" or false part of the equasion to the square root of negative discriminant divided by the result of 2*a
+
+									cout << "Roots are imaginary.\n";
+									cout << "x1 = nan;\tx2 = nan\n"; // Report that x1 is equal to realPart + falsePart
+								}
 								system("pause");
 								system("CLS");
 							}
@@ -1307,8 +1373,9 @@ int main()
 							}
 							else if (bat == "help") 
 							{
+								cout << "\n=====[ Base Commands ]=====";
 								system("help");
-								cout << "\n=====[   ]=====\nSHUTDOWN\tTerminates the Command Line";
+								cout << "\n=====[ SkyOS Commands ]=====\n\nSHUTDOWN\tTerminates the Command Line\nWRITECODE\tOpens a code editor for .bat files\n";
 							}
 							else
 							{
@@ -1333,7 +1400,7 @@ int main()
 			else if (command == "crt") // Hidden function designed to allow users to replicate the feeling of using a monochrome CRT monitor
 			{
 			colourScreen:
-				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer' or 'c64')\n> ";
+				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer' or 'bsod')\n> ";
 				string colour = "default";
 				cin >> colour;
 
@@ -1349,14 +1416,22 @@ int main()
 				{
 					system("Color 02"); // Sulfer is a black background with green text
 				}
-				else if (colour == "c64") 
+				else if (colour == "bsod") 
 				{
-					system("Color 59");
+					system("Color 17");
 				}
 				else 
 				{
 					system("CLS");
 					goto colourScreen; // When the user puts in an invalid colour pallette, clear screen and head back up to the label colourScreen
+				}
+
+				ofstream colourSav("colour.pref");
+
+				if (colourSav.is_open()) 
+				{
+					colourSav << colour;
+					colourSav.close();
 				}
 			}
 			else if (command == "func") // This is my experimentation area. Just like crt, this is hidden from the help text
