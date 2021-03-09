@@ -598,7 +598,39 @@ string* SplitString(string input)
 /// </summary>
 /// <returns></returns>
 int main()
-{	
+{
+	ifstream colourSav("colour.pref");
+
+	if (colourSav.is_open())
+	{
+		string l;
+
+		while (getline(colourSav, l))
+		{
+			string colour = l;
+
+			if (colour == "default")
+			{
+				system("Color 0F"); // Default is a black background with white text
+			}
+			else if (colour == "amber")
+			{
+				system("Color 06"); // Amber is a black background with yellow text
+			}
+			else if (colour == "sulfer")
+			{
+				system("Color 02"); // Sulfer is a black background with green text
+			}
+			else if (colour == "bsod")
+			{
+				system("Color 17"); // BSOD is a blue background with grey text
+			}
+
+			break;
+		}
+		colourSav.close();
+	}
+
 	SetConsoleTitle(TEXT("SkyOS - Startup"));
 
 	bool fullscreenMode = true;
@@ -669,17 +701,12 @@ int main()
 
 		// This boolean keeps track of whether the program's running. If it's set to false the program will terminate
 		bool running = true;
-
-		ifstream colourSav("colour.pref");
-
-		if (colourSav.is_open())
-		{
-
-		}
+		cout << "\tCurrent User: " << name << endl << endl;
 
 		// Main program loop
 		while (running == true)
 		{
+
 			SetConsoleTitle(TEXT("SkyOS - Command Line"));
 
 			// This boolean is used mostly as a method of checking when the screen is refreshed. When it's true, the program will reload the banner shown on lines 655 > 659
@@ -1204,6 +1231,15 @@ int main()
 
 										doCode = false;
 									}
+									else if (line == "help") 
+									{
+										system("CLS");
+										cout << "=====[ HELP ]=====\n\n";
+										system("help");
+										cout << "\n";
+										system("pause");
+										system("CLS");
+									}
 									else if (line == "open") 
 									{
 										system("CLS");
@@ -1373,9 +1409,9 @@ int main()
 							}
 							else if (bat == "help") 
 							{
-								cout << "\n=====[ Base Commands ]=====";
+								cout << "\n=====[ Base Commands ]=====\n\n";
 								system("help");
-								cout << "\n=====[ SkyOS Commands ]=====\n\nSHUTDOWN\tTerminates the Command Line\nWRITECODE\tOpens a code editor for .bat files\n";
+								cout << "\n=====[ SkyOS Commands ]=====\n\nSHUTDOWN\tTerminates the Command Line\nWRITECODE\tOpens a code editor for .bat files\n\n";
 							}
 							else
 							{
@@ -1463,6 +1499,7 @@ int main()
 				cout << "\t|  SkyOS version 0.1.0  |\n";
 				cout << "\t|                       |\n";
 				cout << "\t+-----------------------+\n\n";
+				cout << "\tCurrent User: " << name << endl << endl;
 			}
 		}
 	}
