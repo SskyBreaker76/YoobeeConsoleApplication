@@ -1,6 +1,6 @@
 ﻿/*
 +----------------+
-|   SkyOS   |
+|     SkyOS      |
 +----------------+
 
 Code written by Jackie Gamby-Haycock 2021
@@ -17,12 +17,20 @@ Code written by Jackie Gamby-Haycock 2021
 #include <direct.h>
 #include <vector>
 #include <cmath>
+#include <experimental/filesystem>
+#include <stdio.h>
+#include <cstring>
+#include <fstream>
 
 // =====[ DEFINES ]=====
 #define mathPi 3.141
 
+#include <direct.h>
+#define GetCurrentDir _getcwd
+
 // =====[ NAMESPACES ]=====
 using namespace std;
+using namespace std::experimental::filesystem::v1;
 
 string pass = "Bung";
 
@@ -689,7 +697,7 @@ int main()
 				system("CLS");
 				SetConsoleTitle(TEXT("SkyOS - Help"));
 				cout << "=====[ HELP ]=====\n\n";
-				cout << "====[ COMMANDS ]====\n> shutdown - closes the program\n> cls - clears the consolescreen\n> exec - execute a program\n\t> calc - simple calculator\n\t> adventure - a small text adventure\n\n";
+				cout << "====[ COMMANDS ]====\n> shutdown - closes the program\n> cls - clears the consolescreen\n> exec - execute a program\n\t> calc - simple calculator\n\t> adventure - a small text adventure\n\t> console - starts the built-in command line environment\n\n";
 				system("pause");
 				skipNewLine = true;
 				system("CLS");
@@ -707,7 +715,7 @@ int main()
 
 					// The variable "exec" is used to determine which program the user wants to run.
 					string exec = "";
-					cout << "Programs:\n\n> calc\n> adventure\n> optest\n\nProgram Name (type cancel to return to main command line): ";
+					cout << "Programs:\n\n> calc\n> adventure\n> optest\n> console\n\nProgram Name (type cancel to return to main command line): ";
 					cin >> exec;
 
 					system("CLS");
@@ -726,7 +734,7 @@ int main()
 							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | biggest | pow | sqrt (not implemented) | exit\n";
+							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | biggest | count | pow | sqrt (not implemented) | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -941,6 +949,41 @@ int main()
 								system("pause");
 								system("CLS");
 							}
+							else if (func == "getprimes") 
+							{
+								int startnum = 0;
+								cout << "Start Number: ";
+								cin >> startnum;
+
+								bool isPrime = true;
+
+								if (num == 0 || num == 1)
+								{
+									isPrime == false;
+								}
+								else
+								{
+									for (int i = 2; i <= num / 2; i++)
+									{
+										if (num % i == 0)
+										{
+											isPrime = false;
+										}
+									}
+								}
+
+								if (isPrime)
+								{
+									cout << "\nNumber (" << num << ") is prime.\n";
+								}
+								else
+								{
+									cout << "\nNumber (" << num << ") is not prime.\n";
+								}
+
+								system("pause");
+								system("CLS");
+							}
 							else if (func == "pow") 
 							{
 								float a, b;
@@ -955,6 +998,42 @@ int main()
 								system("pause");
 								system("CLS");
 							}
+							else if (func == "count") 
+							{
+								system("CLS");
+
+								float base = 0;
+								float increment = 0;
+								float max = 0;
+
+								cout << "Base Number: ";
+								cin >> base;
+
+								redoinc:
+
+								cout << "Increment Number: ";
+								cin >> increment;
+
+								if (increment <= 0) 
+								{
+									goto redoinc;
+								}
+
+								redomax:
+
+								cout << "Max Number: ";
+								cin >> max;
+
+								if (max <= base + increment) 
+								{
+									cout << "Max number must be above " << base + increment;
+								}
+
+								for (int i = base; i < max; i += increment) 
+								{
+									cout << i << endl;
+								}
+							}
 							else if (func == "exit")
 							{
 								break;
@@ -968,16 +1047,258 @@ int main()
 						// *Note: Text adventure isn't amazing yet :l
 						StartAdventure();
 					}
-					else if (exec == "interest") 
+					else if (exec == "159") 
 					{
-						float p = 500, r = 2, n = 6, t = 2, a;
+						cout << "What's the highest number you want to go to?";
+						int highest = 0;
+						cin >> highest;
+						for (int i = 1; i < highest; i += 4) 
+						{
+							cout << i << ",\n";
+						}
+						cout << "\n";
+					}
+					else if (exec == "console") 
+					{
+						bool go = true;
+						cout << "> ";
+						system("CLS");
+						SetConsoleTitle(TEXT("SkyOS - Command Line"));
+						struct stat info;
+					
+						string bat = "";
 
-						cout << "How much money have you borrowed? ";
-						cin >> p;
+						while (go == true)
+						{
+							cout << "> ";
+							getline(cin >> ws, bat);
 
-						a = p * pow((1 + r), n);
+							char* arr;
+							arr = &bat[0];
 
-						cout << "Interest is " << a << " a month";
+							if (bat == "shutdown") 
+							{
+								go = false;							
+							}
+							else if (bat == "writecode") 
+							{
+								string fullBat = "";
+								vector<string> file{};
+								string line = "";
+
+								bool doCode = true;
+
+								while (doCode == true) 
+								{
+									system("CLS");
+
+									cout << "Commands: save | open | insertline | editline | removeline | exit\n\n";
+
+									cout << fullBat;
+
+									cout << file.size() << " > ";
+
+									getline(cin >> ws, line);
+
+									if (line == "save")
+									{
+										system("CLS");
+										cout << "=====[ SAVE FILE ]=====\n";
+										fullBat = "";
+
+										for (int i = 0; i < file.size(); i++) 
+										{
+											fullBat.append(file[i]).append("\n");
+										}
+
+										cout << "\nFile Name: ";
+
+										string nam = "";
+										cin >> nam;
+
+										ofstream batFile(nam + ".bat");
+										batFile << fullBat;
+										batFile.close();
+
+										doCode = false;
+									}
+									else if (line == "open") 
+									{
+										system("CLS");
+										cout << "=====[ OPEN FILE ]=====\n";
+										cout << "\nFile Name: ";
+										string f = "";
+										cin >> f;
+
+										ifstream instream(f);
+										string l;
+
+										file.clear();
+
+										if (instream.is_open()) 
+										{
+											while (getline(instream,l)) 
+											{
+												file.push_back(l);
+											}
+											instream.close();
+										}
+
+										fullBat = "";
+
+										int cap = file.size();
+
+										for (int i = 0; i < cap; i++)
+										{
+											fullBat.append(to_string(i)).append(" > ").append(file[i]).append("\n");
+										}
+									}
+									else if (line == "insertline") 
+									{
+										system("CLS");
+										cout << "=====[ INSERT LINE ]=====\n";
+										cout << "\nWhere are you inserting a line? ";
+
+										int line = 0;
+										cin >> line;
+
+										if (line >= file.size()) 
+										{
+											cout << "Line number must be less than " << (file.size() - 1) << "!\n";
+										}
+
+										cout << endl;
+										string newLine = "";
+										getline(cin >> ws, newLine);
+
+										auto pos = file.begin() + line;
+
+										file.insert(pos, newLine);
+
+										fullBat = "";
+
+										int cap = file.size();
+
+										for (int i = 0; i < cap; i++)
+										{
+											fullBat.append(to_string(i)).append(" > ").append(file[i]).append("\n");
+										}
+									}
+									else if (line == "removeline") 
+									{
+										system("CLS");
+										cout << "=====[ REMOVE LINE ]=====\n";
+
+										cout << "\nWhich line do you want to remove? ";
+										int line = 0;
+										cin >> line;
+
+										if (line >= file.size())
+										{
+											cout << "Line number must be less than " << (file.size() - 1) << "!\n";
+										}
+
+										auto pos = file.begin() + line;
+
+										file.erase(pos);
+
+										fullBat = "";
+
+										int cap = file.size();
+
+										for (int i = 0; i < cap; i++)
+										{
+											fullBat.append(to_string(i)).append(" > ").append(file[i]).append("\n");
+										}
+									}
+									else if (line == "editline") 
+									{
+										system("CLS");
+										cout << "=====[ EDIT LINE ]=====\n";
+
+									lineSelect:
+
+										cout << "\nWhich line are you editing? ";
+																				
+										int line = 0;
+										cin >> line;
+
+										if (line >= file.size()) 
+										{
+											cout << "Line number must be less than " << (file.size() - 1) << "!\n";
+											goto lineSelect;
+										}
+
+										cout << "Old Line:\n" << file[line] << endl;
+										cout << "New Line:\n";
+										
+										string newLine = "";
+										getline(cin >> ws, newLine);
+
+										file[line] = newLine;
+
+										fullBat = "";
+
+										int cap = file.size();
+
+										for (int i = 0; i < cap; i++)
+										{
+											fullBat.append(to_string(i)).append(" > ").append(file[i]).append("\n");
+										}
+									}
+									else if (line == "exit") 
+									{
+										system("CLS");
+										cout << "=====[ EXIT PROGRAM ]=====\n";
+										cout << "\nDo you want to save your code? Y/N\n";
+										string save = "";
+										cin >> save;
+
+										if (save == "Y") 
+										{
+											fullBat = "";
+
+											for (int i = 0; i < file.size(); i++)
+											{
+												fullBat.append(file[i]).append("\n");
+											}
+
+											cout << "\nFile Name: ";
+
+											string nam = "";
+											cin >> nam;
+
+											ofstream batFile(nam + ".bat");
+											batFile << fullBat;
+											batFile.close();
+										}
+
+										doCode = false;
+									}
+									else 
+									{
+										file.push_back(line);
+										fullBat = "";
+
+										int cap = file.size();
+
+										for (int i = 0; i < cap; i++) 
+										{
+											fullBat.append(to_string(i)).append(" > ").append(file[i]).append("\n");
+										}
+									}
+								}
+							}
+							else if (bat == "help") 
+							{
+								system("help");
+								cout << "\n=====[   ]=====\nSHUTDOWN\tTerminates the Command Line";
+							}
+							else
+							{
+								system(arr);
+							}
+						}
 					}
 					else
 					{
