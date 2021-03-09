@@ -734,7 +734,7 @@ int main()
 							// The six lines below display the FUNCTIONS header, what functions there are and then get which one the user wants to do
 							string func = "";
 							cout << "===[ FUNCTIONS ]===\n";
-							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | biggest | count | pow | sqrt (not implemented) | exit\n";
+							cout << "add | sub | div | mult | tri | crcl | evenodd | prime | getprimes | biggest | count | pow | sqrt (not implemented) | exit\n";
 							cout << "Desired Function: ";
 
 							cin >> func;
@@ -968,10 +968,10 @@ int main()
 									system("CLS");
 								}
 
-								bool isPrime = true;
-
 								for (int num = startnum; num < endnum; num++) 
 								{
+									bool isPrime = true;
+
 									if (num == 0 || num == 1)
 									{
 										isPrime == false;
@@ -989,11 +989,11 @@ int main()
 
 									if (isPrime)
 									{
-										cout << "\nNumber (" << num << ") is prime.\n";
+										cout << "Number (" << num << ") is prime.\n";
 									}
 									else
 									{
-										cout << "\nNumber (" << num << ") is not prime.\n";
+										cout << "Number (" << num << ") is not prime.\n";
 									}
 								}
 
