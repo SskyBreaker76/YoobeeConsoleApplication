@@ -956,7 +956,7 @@ int main()
 								cin >> startnum;
 
 								bool isPrime = true;
-
+								for (int num = startnum; num < endnum; num++) {}
 								if (num == 0 || num == 1)
 								{
 									isPrime == false;
