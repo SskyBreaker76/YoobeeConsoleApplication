@@ -21,6 +21,10 @@ Code written by Jackie Gamby-Haycock 2021
 #include <stdio.h>
 #include <cstring>
 #include <fstream>
+#include <mmsystem.h>
+#include <mciapi.h>
+
+#pragma comment(lib, "Winmm.lib");
 
 // =====[ DEFINES ]=====
 #define mathPi 3.141
@@ -624,6 +628,10 @@ int main()
 			else if (colour == "bsod")
 			{
 				system("Color 17"); // BSOD is a blue background with grey text
+			}
+			else 
+			{
+				system(colour.c_str());
 			}
 
 			break;
@@ -1435,7 +1443,7 @@ int main()
 			}
 			else if (command == "crt") // Hidden function designed to allow users to replicate the feeling of using a monochrome CRT monitor
 			{
-			colourScreen:
+			colourScreen :
 				cout << "Which colour style would you like to use? (Type 'default' or 'amber' or 'sulfer' or 'bsod')\n> ";
 				string colour = "default";
 				cin >> colour;
@@ -1456,10 +1464,41 @@ int main()
 				{
 					system("Color 17");
 				}
+				else if (colour == "custom") 
+				{
+					cout << "Pick two colours (use the letters that appear before the colour name): \n";
+					cout << "[1] Blue\n";
+					cout << "[2] Green\n";
+					cout << "[3] Aqua\n";
+					cout << "[4] Red\n";
+					cout << "[5] Magenta\n";
+					cout << "[6] Yellow\n";
+					cout << "[7] White\n";
+					cout << "[8] Grey\n";
+					cout << "[9] Light Blue\n";
+					cout << "[0] Black\n";
+					cout << "[A] Light Green\n";
+					cout << "[B] Light Aqua\n";
+					cout << "[C] Light Red\n";
+					cout << "[D] Light Magenta\n";
+					cout << "[E] Light Yellow\n";
+					cout << "[F] Bright White\n";
+					char c[2] = {'E','E'};
+					cout << "Colour (BackgroundForeground): ";
+					cin >> c;
+
+					string f = "color ";
+
+					f.append(c);
+
+					system(f.c_str());
+
+					colour = f;
+				}
 				else 
 				{
-					system("CLS");
-					goto colourScreen; // When the user puts in an invalid colour pallette, clear screen and head back up to the label colourScreen
+					cout << "Unrecognized colour scheme \"" << colour << "\"";
+					goto colourScreen;
 				}
 
 				ofstream colourSav("colour.pref");
@@ -1483,6 +1522,137 @@ int main()
 					getline(cin >> ws, value);
 					cout << "\n\n" << value << "\n\n";
 				}
+			}
+			else if (command == "bob") 
+			{
+				cout << "Jews in the gas chambers:   Hitler:\n\n";
+				cout << "       ###  ####         ||         ###  ####      \n";
+				cout << "      #'#'#    ###       ||        #.#.#    ###    \n";
+				cout << "      ##^##      ###     ||  Bye > ##u##      ###  \n";
+				cout << "       ###   #######     ||         ###   #######  \n";
+				cout << "     #########           ||       #########        \n";
+				cout << "    #########            ||      #########         \n";
+				cout << "    # ########           ||      # ########        \n";
+				cout << " # #   #######           ||     #   #######        \n";
+				cout << " ###   #######           ||     #   #######        \n";
+				cout << "        ######           ||     #    ######        \n";
+				cout << "        ########         ||     #    ########      \n";
+				cout << "       #########         ||         #########      \n";
+				cout << "       ###    ###        ||         ###    ###     \n";
+				cout << "       ##      ##        ||         ##      ##     \n";
+			}
+			else if (command == "bitch") 
+			{
+			cout << "\n";
+			cout << "                               ..,**////*,...             \n";
+			cout << "                          ..,*/#%&@@@&&&&&&%(,....        \n";
+			cout << "                        .*/(%&&@@&&&@@@@@@@@@&%#/,......    \n";
+			cout << "                      ..*#%&&&&@&&&&&%###%&&@&&&@@&%#/*...  \n";
+			cout << "                      .*(&&&@@@&%%#(((////(#%&&@@@@&&&#/*,...\n";
+			cout << "                      .*#&&&&@@&#((//////////(#%&&@@@@&&#(***,..\n";
+			cout << "                   .,.*(%%%&@&%%#((///***/(#%%%%%%%&&&&&&%#(*,,..\n";
+			cout << "                   ./(%%%%&&@&&&%%%%#/*/%#((///*,,(%@@@&&&&%(/*,...\n";
+			cout << "                  .*(%&@@@&&&%#(((///(#(%#%%#(((((/(%@@@&@@&%(/,... \n";
+			cout << "                  .,(%&@@&@&%(((##((#%%((((##((#(**/#&@&@@@@@&#/,.  \n";
+			cout << "                 ..*(%&%%&@%(/((//(%&#//***/((/*,**//#&@@@@&&%%#*.    \n";
+			cout << "                 ./#&&&&&@@&#,,,*/**/###(/////(((***//#&@&&##(//,.        \n";
+			cout << "                 ,(#%%%&@@@&#*,**/((%%%%%####%##(/***(%&&&&#((/*,.          \n";
+			cout << "                .*(%%%%&@@@&#,**///(%#/(((/***/((////#&@@@@@&%#/..         \n";
+			cout << "                 .,**(#%%%&&#***/((#(///(((/////////(%@@@@@@&%#*           \n";
+			cout << "                 .*#%&&&&&&&&#/(//(((///((//////////#&@@@&&&/,..             \n";
+			cout << "                   .*(#%&&&&@&(//((((((((((/////////#&@@@&&#*,..             \n";
+			cout << "                   .*/////(%&&&%##(((((((((///****/(#%&@&&&&%/,.             \n";
+			cout << "                .,,,*/(###(///(#%%####(///********/((###%&&&%(///*,.         \n";
+			cout << "             .,,,***//*********/((###(////********//((%##&&(/**/***///*,.     \n";
+			cout << "          ..,,,******************///((((/*********///(/////**************,.   \n";
+			cout << "       .....,***//******,,,**********//(//*******////**********************..   \n";
+			cout << "     .....,,,**//****************************////**/************************,.  \n";
+			cout << "   ......,***//*****/***/******************/(//////**************************,. \n";
+			cout << "  .....,,****//*****/*///**************,*******///****************************, \n";
+			cout << "  ....,,**/////*****(/(#************************/*****/************************.\n";
+			cout << " .,,,.***///((*****//(#(**************************,*/**************************.\n";
+			cout << " **,,,*((///(#/,***/%%(******//*******************************************//*/*,\n";
+			cout << ".**//,*/(///##/**/(&#//////**********************************************/(/***,\n";
+			cout << ",**(#**/////##///#%(((((///////*****************************************/(/*****\n";
+			cout << "***/#(**/(//##//(#%%%%#(////**********************,***********************///***\n";
+			}
+			else if (command == "choochoo") 
+			{
+				cout << "			                      *.&&%%										\n";
+				cout << "                *&,*###########(/#/((%(@&*&&/(									\n";
+				cout << "             &&&&&&&&%&#&&&&&&&&%&%%****(**///((#@&%/%/@@@@@@@@@@              \n";
+				cout << "           @@@@@@@@@%%&&@@&&@&&@@&@/***/**/*///#/%((@@*/*//#@@@@@@%@&(#((/     \n";
+				cout << "          @@@@@@@@@@@@@@@@@@%@@@@@//*/**/******@(/(/(@@#//**/@@@@@(#/**(*((.   \n";
+				cout << "         @@@@@@@@@@@@@@@@@@@@@@@@(///////*///**@#(#(##@****,//@@@@%%##/(//(/   \n";
+				cout << "         @@@@@@@@@@@@@@@@@@@@@@@@*(((#(///*//**#&%##*@@@#(@*#((@@@@#(@/////(   \n";
+				cout << "         /@%(@@@@@@(@@@@@@@@@@@@@@@@@@@#@@@@@%#@/(@#%/#(*(&%***@@@&%(@((((#(   \n";
+				cout << "         *@@@@@@@@@%@@@@@@@@@@&@#/#@@@/#((@#@@@%%%%&&@@&%&@&&%#&%&&%%#@@#(&@&  \n";
+				cout << "     @@@@@@@@@@@@@@@@@@@@@%@@@@@####@@%%%@,#,@@@@@/%//*///*///&#(*/(@@@@@*@@/@ \n";
+				cout << "     @@@@@@@@@@@@@@@@@@@@@@@@@@&#(@##@##@(%@@%*&@@%@%%@@@@@@%/#@&@/*%@(%@(@%,  \n";
+				cout << "     @@@@@@@@@@@@@@@@@@@%&@@@@&%%##&&(@&(/@&&@(@@@@&/@@@@@@(@*#@#%#@&@#@. *    \n";
+				cout << "           @@@@@@@@ @@@@*%&#&%&%@&@(/ %** @&.@   @.                            \n";
+				cout << "           *@@@       .@.";
+			}
+			else if (command == "321fuck") 
+			{
+				PlaySound(TEXT("321fuck.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			}
+			else if (command == "321fuckCOLOR") 
+			{
+				PlaySound(TEXT("321fuck.wav"), NULL, SND_FILENAME |  SND_ASYNC);
+
+				int counter = 0;
+
+				int c = false;
+
+				while (true) 
+				{
+					counter++;
+
+					if (c == 0) 
+					{
+						system("color 9D");
+						c++;
+					}
+					else  if (c == 1)
+					{
+						system("color 73");
+						c++;
+					}
+					else if (c == 2) 
+					{
+						system("color A0");
+						c++;
+					}
+					else if (c == 3) 
+					{
+						system("color 86");
+						c++;
+					}
+					else if (c == 4) 
+					{
+						system("color 5C");
+						c++;
+					}
+					else if (c == 5) 
+					{
+						system("color F2");
+						c = 0;
+					}
+
+					if (counter > 260000) 
+					{
+						break;
+					}
+				}
+			}
+			else if (command == "ourlives") 
+			{
+				PlaySound(TEXT("ourlives.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			}
+			else if (command == "soundstop") 
+			{
+				PlaySound(NULL, 0, 0);
 			}
 			else
 			{
